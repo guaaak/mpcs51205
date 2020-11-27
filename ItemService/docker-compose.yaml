@@ -1,0 +1,14 @@
+web:
+  build: .
+  container_name: item_service
+  ports:
+    - "8080:8080"
+  links:
+    - mongo:mongo
+  command: java -Djava.security.egd=file:/dev/./urandom -jar /app.jar
+
+mongo:
+  image: mongo:latest
+  container_name: mongo_item_service
+  ports:
+    - "27017:27017"
