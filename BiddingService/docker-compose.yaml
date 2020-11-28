@@ -1,0 +1,14 @@
+web:
+  build: .
+  container_name: bidding_service
+  ports:
+    - "9090:9090"
+  links:
+    - mongo:mongo
+  command: java -Djava.security.egd=file:/dev/./urandom -jar /app.jar
+
+mongo:
+  image: mongo:latest
+  container_name: mongo_bidding_service
+  ports:
+    - "27018:27018"
