@@ -1,6 +1,7 @@
 package com.example.itemservice.dao.repository;
 
 import com.example.itemservice.dao.domain.Item;
+import com.example.itemservice.model.UpdateItemBody;
 import java.util.List;
 
 /**
@@ -22,6 +23,8 @@ public interface ItemRepository {
     List<Item> getItemListByFlag(boolean isFlagged);
 
     void flagItem(String itemID, String userID);
+
+    void updateItem(String itemId, UpdateItemBody updateItemBody);
 
 
 }

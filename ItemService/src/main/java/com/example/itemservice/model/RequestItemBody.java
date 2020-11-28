@@ -11,10 +11,11 @@ import lombok.ToString;
 @ToString
 public class RequestItemBody {
 
-    private int quantity = 0;
+    private double quantity = 0;
     private double ratings = 0;
     private String description = "";
     private String name = "";
+    private double shippingCosts = 0;
 
     private String isFlagged = "false";
 

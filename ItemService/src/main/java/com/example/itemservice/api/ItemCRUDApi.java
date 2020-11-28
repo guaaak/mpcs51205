@@ -2,10 +2,14 @@ package com.example.itemservice.api;
 
 import com.example.itemservice.constants.SysConstants;
 import com.example.itemservice.dao.domain.Item;
+import com.example.itemservice.model.CountDownInfo;
 import com.example.itemservice.model.RequestFlagItem;
 import com.example.itemservice.model.RequestItemBody;
 import com.example.itemservice.model.ResponseFlaggedList;
 import com.example.itemservice.model.ResponseItemBody;
+import com.example.itemservice.model.ResponseSearchOnItem;
+import com.example.itemservice.model.SimpleResponse;
+import com.example.itemservice.model.UpdateItemBody;
 import java.util.List;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,10 +30,10 @@ public interface ItemCRUDApi {
     Item getItemByID(@PathVariable String itemId);
 
     @RequestMapping(value = "/keyword/{keyword}", method = RequestMethod.GET)
-    List<Item> getItemListByKeyword(@PathVariable String keyword);
+    List<ResponseSearchOnItem> getItemListByKeyword(@PathVariable String keyword);
 
     @RequestMapping(value = "/category/{categoryId}", method = RequestMethod.GET)
-    List<Item> getItemListByCategory(@PathVariable String categoryId);
+    List<ResponseSearchOnItem> getItemListByCategory(@PathVariable String categoryId);
 
     @RequestMapping(value = "/flagged", method = RequestMethod.GET)
     ResponseFlaggedList getItemListByFlag();
@@ -38,7 +42,13 @@ public interface ItemCRUDApi {
     Boolean flagItem(@RequestBody RequestFlagItem requestFlagItem);
 
     @RequestMapping(value = "/delete/{itemId}", method = RequestMethod.POST)
-    Boolean deleteItem(@PathVariable String itemId);
+    SimpleResponse deleteItem(@PathVariable String itemId);
+
+    @RequestMapping(value = "/update/{itemId}", method = RequestMethod.POST)
+    Boolean updateItem(@PathVariable String itemId, @RequestBody UpdateItemBody updateItemBody);
+
+    @RequestMapping(value = "/countdown/{keyword}", method = RequestMethod.GET)
+    List<CountDownInfo> getCountdownInfo(@PathVariable String keyword);
 
 
 }

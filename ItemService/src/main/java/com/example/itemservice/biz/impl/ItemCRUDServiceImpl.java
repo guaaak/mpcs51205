@@ -4,6 +4,7 @@ import com.example.itemservice.biz.ItemCRUDService;
 import com.example.itemservice.dao.domain.Item;
 import com.example.itemservice.dao.repository.ItemRepository;
 import com.example.itemservice.dao.repository.MetaRepository;
+import com.example.itemservice.model.UpdateItemBody;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,5 +64,10 @@ public class ItemCRUDServiceImpl implements ItemCRUDService {
     public boolean deleteItem(String itemId) {
         itemRepository.deleteItem(itemId);
         return true;
+    }
+
+    @Override
+    public void updateItem(String itemId, UpdateItemBody updateItemBody) {
+        itemRepository.updateItem(itemId, updateItemBody);
     }
 }

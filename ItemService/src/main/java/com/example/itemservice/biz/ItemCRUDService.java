@@ -1,6 +1,7 @@
 package com.example.itemservice.biz;
 
 import com.example.itemservice.dao.domain.Item;
+import com.example.itemservice.model.UpdateItemBody;
 import java.util.List;
 
 /**
@@ -24,5 +25,7 @@ public interface ItemCRUDService {
     List<Item> getFlaggedItems();
 
     boolean deleteItem(String itemId);
+
+    void updateItem(String itemId, UpdateItemBody updateItemBody);
 
 }

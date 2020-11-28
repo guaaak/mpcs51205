@@ -20,6 +20,7 @@ public class Item {
     private double ratings;
     private String description;
     private String name;
+    private double shippingCosts;
 
     private boolean isFlagged;
     private List<String> flagUsers = new ArrayList<>();
