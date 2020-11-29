@@ -202,7 +202,7 @@ def add_item_to_watchlist():
     uid = int(request.args.get('uid'))
     item_id = int(request.args.get('item_id'))
     criteria = float(request.args.get('criteria'))
-    if uid and item_id:
+    if uid is not None and item_id is not None:
         existing_record = Watchlist.query.filter(
             and_(Watchlist.uid == uid,Watchlist.itemid == item_id)
         ).first()
@@ -211,8 +211,15 @@ def add_item_to_watchlist():
                 status = 'fail',
                 reason = 'recording already exist'
             )
-        r = requests.get('http://localhost:8080/auction/item/' + str(item_id))
-        # r = requests.get('http://localhost:23333/')
+        url = 'http://itemservice:8080/auction/item/' + str(item_id)
+        r = requests.get(url)
+        # url = 'http://itemservice:8080/auction/item/0'
+        # r = requests.get(url)
+        # return jsonify(
+        #     url = url,
+        #     code = r.status_code,
+        #     name = r.json()['name']
+        # )
         name = r.json()['name']
         new_record = Watchlist(
             uid = uid,
@@ -223,9 +230,12 @@ def add_item_to_watchlist():
         )
         db.session.add(new_record)
         db.session.commit()
+        return jsonify(
+            status = 'success'
+        )
     return jsonify(
-        status = 'success'
-    )
+        status = 'fail',
+    ), 200
 
 @app.route('/getItemsInWatchlist/', methods=['GET'])
 def get_items_in_watchlist():

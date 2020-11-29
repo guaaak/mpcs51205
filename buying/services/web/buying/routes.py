@@ -15,7 +15,7 @@ def hello():
 @app.route('/name')
 def hello2():
     return jsonify(
-        name = 'name'
+        name = 'buying'
     )
 
 @app.route('/addItemToCart/', methods=['GET','POST'])
