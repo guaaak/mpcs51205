@@ -11,7 +11,7 @@ def create_app(test_config = None):
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://hello_flask:hello_flask@db:5432/hello_flask_dev'
     app.config.from_object("user_management.config.Config")
     app.config['CORS_HEADERS'] = 'Content-Type'
-    cors = CORS(app, resources={r"/foo": {"origins": "http://localhost:3000"}})
+    cors = CORS(app, resources={r"*": {"origins": "http://localhost:3000"}})
 
     db.init_app(app)
 

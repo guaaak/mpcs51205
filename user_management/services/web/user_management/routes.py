@@ -8,7 +8,7 @@ from flask_cors import cross_origin
 
 #for test
 @app.route('/')
-@cross_origin(origin='*',headers=['Content-Type'])
+# @cross_origin(origin='*',headers=['Content-Type'])
 def hello():
     resp = make_response(jsonify(
         id = '5',
