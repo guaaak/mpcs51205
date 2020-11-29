@@ -23,7 +23,7 @@ def add_item_to_cart():
     uid = int(request.args.get('uid'))
     item_id = int(request.args.get('item_id'))
     price = float(request.args.get('price'))
-    if uid and item_id:
+    if uid is not None and item_id is not None:
         existing_record = Shoppingcart.query.filter(
             and_(Shoppingcart.uid == uid,Shoppingcart.itemid == item_id)
         ).first()
@@ -33,8 +33,16 @@ def add_item_to_cart():
                 reason = 'recording already exist'
             )
         # r = requests.get('http://localhost:8080/auction/item/' + str(item_id))
-        r = requests.get('http://localhost:23334/name')
+        # r = requests.get('http://localhost:23334/name')
+        # name = r.json()['name']
+        url = 'http://itemservice:8080/auction/item/' + str(item_id)
+        r = requests.get(url)
+        # return jsonify(
+        #     status = r.status_code,
+        #     name = r.json()['name']
+        # )
         name = r.json()['name']
+
         new_record = Shoppingcart(
             uid = uid,
             itemid = item_id,
@@ -124,7 +132,13 @@ def checkout():
     items = _get_items_in_cart(uid)
     for item in items:
         # r = requests.get('http://localhost:8080/auction/item/delete/' + str(item))
-        r = requests.get('http://localhost:23334/')
+        # r = requests.get('http://localhost:23334/')
+        url = 'http://itemservice:8080/auction/item/delete/' + str(item['item_id'])
+        r = requests.post(url)
+        return jsonify(
+            status=r.status_code,
+            code = r.json()['success']
+        )
         if r.json()['success']:
             r1 = _delete_item_in_cart(uid, item['item_id'])
             r2 = add_item_to_history(uid, item['item_id'], item['item_name'], item['item_price'])

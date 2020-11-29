@@ -4,12 +4,19 @@ services:
   web:
     build: ./services/web
     command: flask run -h 0.0.0.0 -p 23334
+    container_name: buying
     volumes:
       - ./services/web/:/usr/src/app/
     ports:
       - 23334:23334
     env_file:
       - ./.env.dev
+    links:
+      - db:db
+    external_links:
+      - itemservice
+    network_mode: "bridge"
+
   db:
     image: postgres:12-alpine
     volumes:
@@ -20,6 +27,7 @@ services:
       - POSTGRES_DB=hello_buying_dev
     ports:
       - "5433:5432"
+    network_mode: "bridge"
 
 volumes:
   postgres_data:
