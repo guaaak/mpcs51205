@@ -10,7 +10,7 @@ import requests
 def hello():
     return jsonify(
         id = '5',
-        name = 'name'
+        name = 'container'
     )
 
 def is_user_admin_or_suspend(uid, op):
@@ -47,10 +47,14 @@ def is_user_suspend():
 
 @app.route('/userCreate/', methods=['POST', 'GET'])
 def user_create():
-    username = request.form['username']
-    email = request.form['email']
-    password = request.form['password']
-    bio = request.form['user_bio']
+    # username = request.form['username']
+    # email = request.form['email']
+    # password = request.form['password']
+    # bio = request.form['user_bio']
+    username = request.json['username']
+    email = request.json['email']
+    password = request.json['password']
+    bio = request.json['user_bio']
     # username = 'test4'
     # email = 'test4@test.com'
     # password = 'test4'
@@ -147,10 +151,10 @@ def get_user_info():
         reason = 'uid not right or missed'
     ), 200
 
-@app.route('/login/', methods=['GET'])
+@app.route('/login/', methods=['GET', 'POST'])
 def user_login():
-    email = request.form['email']
-    password = request.form['password']
+    email = request.json['email']
+    password = request.json['password']
     # email = 'test4@test.com'
     # password = 'test'
     if email and password:
