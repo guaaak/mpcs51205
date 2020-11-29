@@ -11,4 +11,4 @@ mongo:
   image: mongo:latest
   container_name: mongo_bidding_service
   ports:
-    - "27018:27018"
+    - "27018:27017"
