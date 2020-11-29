@@ -26,4 +26,6 @@ public interface BidRecordRepository {
 
     List<BidRecord> getActiveBids();
 
+    List<BidRecord> getClosedBids();
+
 }

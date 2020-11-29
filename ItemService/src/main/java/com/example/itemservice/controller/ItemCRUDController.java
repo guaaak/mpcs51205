@@ -193,7 +193,7 @@ public class ItemCRUDController implements ItemCRUDApi {
     }
 
     @Override
-    public Boolean updateItem(String itemId, UpdateItemBody updateItemBody) {
+    public SimpleResponse updateItem(String itemId, UpdateItemBody updateItemBody) {
 
         itemCRUDService.updateItem(itemId, updateItemBody);
 
@@ -217,7 +217,7 @@ public class ItemCRUDController implements ItemCRUDApi {
         HttpEntity<String> requestEntity = new HttpEntity<String>(value, headers);
         ResponseEntity<String> response = restT.postForEntity(url, requestEntity, String.class);
         System.out.println("post json : " + response);
-        return true;
+        return new SimpleResponse();
     }
 
     @Override

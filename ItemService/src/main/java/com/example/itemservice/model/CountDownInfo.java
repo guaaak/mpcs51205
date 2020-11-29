@@ -12,6 +12,7 @@ import lombok.ToString;
 public class CountDownInfo {
 
     String itemID = "";
+    String userId = "";
     String itemName = "";
     String startTime = "";
 

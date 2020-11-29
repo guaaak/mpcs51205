@@ -1,6 +1,7 @@
 package com.example.biddingservice.biz;
 
 import com.example.biddingservice.dao.domain.BidRecord;
+import com.example.biddingservice.dao.domain.CountDownRecord;
 import com.example.biddingservice.model.RequestInitBidBody;
 import com.example.biddingservice.model.UpdateBuyNow;
 import java.util.List;
@@ -26,6 +27,12 @@ public interface BidProcessService {
     BidRecord getBidRecord(String itemId);
 
     List<BidRecord> getActiveBidsList();
+
+    List<BidRecord> getClosedBidsList();
+
+    void createCountDown(CountDownRecord countDownRecord);
+
+    List<CountDownRecord> getCountDownByUserId(String userID);
 
 
 }

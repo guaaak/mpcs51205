@@ -3,7 +3,9 @@ package com.example.biddingservice.biz.impl;
 import com.example.biddingservice.biz.BidProcessService;
 import com.example.biddingservice.constants.BidStatus;
 import com.example.biddingservice.dao.domain.BidRecord;
+import com.example.biddingservice.dao.domain.CountDownRecord;
 import com.example.biddingservice.dao.repository.BidRecordRepository;
+import com.example.biddingservice.dao.repository.CountDownRecordRepository;
 import com.example.biddingservice.dao.repository.OfferRecordRepository;
 import com.example.biddingservice.model.RequestInitBidBody;
 import com.example.biddingservice.model.UpdateBuyNow;
@@ -25,6 +27,9 @@ public class BidProcessServiceImpl implements BidProcessService {
 
     @Autowired
     private OfferRecordRepository offerRecordRepository;
+
+    @Autowired
+    private CountDownRecordRepository countDownRecordRepository;
 
     @Override
     public void initBidProcess(RequestInitBidBody bidBody) {
@@ -68,5 +73,20 @@ public class BidProcessServiceImpl implements BidProcessService {
     @Override
     public List<BidRecord> getActiveBidsList() {
         return bidRecordRepository.getActiveBids();
+    }
+
+    @Override
+    public List<BidRecord> getClosedBidsList() {
+        return bidRecordRepository.getClosedBids();
+    }
+
+    @Override
+    public void createCountDown(CountDownRecord countDownRecord) {
+        countDownRecordRepository.saveRecord(countDownRecord);
+    }
+
+    @Override
+    public List<CountDownRecord> getCountDownByUserId(String userID) {
+        return countDownRecordRepository.getRecordByUserId(userID);
     }
 }

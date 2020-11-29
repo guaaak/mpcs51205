@@ -136,4 +136,14 @@ public class BidRecordRepositoryImpl implements BidRecordRepository {
         return mongoTemplate.find(query, BidRecord.class);
     }
 
+    @Override
+    public List<BidRecord> getClosedBids() {
+
+        Query query = new Query();
+        Criteria criteria = new Criteria().where("BidStatus").is(BidStatus.Closed);
+        query.addCriteria(criteria);
+
+        return mongoTemplate.find(query, BidRecord.class);
+    }
+
 }

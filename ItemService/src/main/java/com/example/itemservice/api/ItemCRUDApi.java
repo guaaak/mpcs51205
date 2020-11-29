@@ -45,7 +45,8 @@ public interface ItemCRUDApi {
     SimpleResponse deleteItem(@PathVariable String itemId);
 
     @RequestMapping(value = "/update/{itemId}", method = RequestMethod.POST)
-    Boolean updateItem(@PathVariable String itemId, @RequestBody UpdateItemBody updateItemBody);
+    SimpleResponse updateItem(@PathVariable String itemId,
+            @RequestBody UpdateItemBody updateItemBody);
 
     @RequestMapping(value = "/countdown/{keyword}", method = RequestMethod.GET)
     List<CountDownInfo> getCountdownInfo(@PathVariable String keyword);

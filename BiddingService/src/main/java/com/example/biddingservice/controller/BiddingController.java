@@ -5,10 +5,14 @@ import com.example.biddingservice.biz.BidProcessService;
 import com.example.biddingservice.biz.OfferProcessService;
 import com.example.biddingservice.constants.BidStatus;
 import com.example.biddingservice.dao.domain.BidRecord;
+import com.example.biddingservice.dao.domain.CountDownRecord;
+import com.example.biddingservice.model.AuctionWindowResponse;
 import com.example.biddingservice.model.MeetCriteriaResponse;
 import com.example.biddingservice.model.RequestInitBidBody;
 import com.example.biddingservice.model.RequestNewOfferBody;
 import com.example.biddingservice.model.ResponseActiveBidList;
+import com.example.biddingservice.model.ResponseClosedBidList;
+import com.example.biddingservice.model.SimpleResponse;
 import com.example.biddingservice.model.UpdateBuyNow;
 import com.example.biddingservice.model.UserInfoBody;
 import com.example.biddingservice.util.TimeHandler;
@@ -49,7 +53,7 @@ public class BiddingController implements BiddingApi {
 
 
     @Override
-    public Boolean makeNewOffer(RequestNewOfferBody requestNewOfferBody) {
+    public SimpleResponse makeNewOffer(RequestNewOfferBody requestNewOfferBody) {
 
         bidProcessService
                 .placeNewBid(requestNewOfferBody.getItemId(), requestNewOfferBody.getUserId(),
@@ -79,11 +83,11 @@ public class BiddingController implements BiddingApi {
             e.printStackTrace();
         }
 
-        return true;
+        return new SimpleResponse();
     }
 
     @Override
-    public Boolean initBid(RequestInitBidBody requestInitBidBody) {
+    public SimpleResponse initBid(RequestInitBidBody requestInitBidBody) {
 
         bidProcessService.initBidProcess(requestInitBidBody);
 
@@ -202,11 +206,11 @@ public class BiddingController implements BiddingApi {
             }, delayForAlertLast5Min - 60, 1000000000, TimeUnit.SECONDS);
         }
 
-        return true;
+        return new SimpleResponse();
     }
 
     @Override
-    public Boolean closeBidByAdmin(String itemID) {
+    public SimpleResponse closeBidByAdmin(String itemID) {
 
         bidProcessService.closeBidProcess(itemID);
         System.out.println("closing bid on " + itemID);
@@ -226,13 +230,13 @@ public class BiddingController implements BiddingApi {
         System.out.println("adding item to winner's cart");
         callBuyingToAddToCart(bidRecord.getWinnerId(), bidRecord.getItemId());
 
-        return true;
+        return new SimpleResponse();
     }
 
     @Override
-    public Boolean closeEmptyBid(String itemID) {
+    public SimpleResponse closeEmptyBid(String itemID) {
         bidProcessService.closeBidProcess(itemID);
-        return true;
+        return new SimpleResponse();
     }
 
     @Override
@@ -245,12 +249,19 @@ public class BiddingController implements BiddingApi {
     }
 
     @Override
+    public ResponseClosedBidList getClosedBidsList() {
+        ResponseClosedBidList responseClosedBidList = new ResponseClosedBidList();
+        responseClosedBidList.setClosedBidList(bidProcessService.getClosedBidsList());
+        return responseClosedBidList;
+    }
+
+    @Override
     public BidRecord getBidRecordByItem(String itemId) {
         return bidProcessService.getBidRecord(itemId);
     }
 
     @Override
-    public Boolean closeBidFromBuyNow(String itemId) {
+    public SimpleResponse closeBidFromBuyNow(String itemId) {
 
         bidProcessService.closeBidProcess(itemId);
         System.out.println("closing bid from buy now on " + itemId);
@@ -259,7 +270,7 @@ public class BiddingController implements BiddingApi {
         System.out.println("adding item to winner's cart");
         callBuyingToAddToCart(bidRecord.getWinnerId(), bidRecord.getItemId());
 
-        return true;
+        return new SimpleResponse();
     }
 
     @Override
@@ -286,6 +297,22 @@ public class BiddingController implements BiddingApi {
         }
 
         return true;
+    }
+
+    @Override
+    public SimpleResponse createCountDown(CountDownRecord countDownRecord) {
+        bidProcessService.createCountDown(countDownRecord);
+
+        return new SimpleResponse();
+    }
+
+    @Override
+    public AuctionWindowResponse getCountDown(String userId) {
+
+        List<CountDownRecord> list = bidProcessService.getCountDownByUserId(userId);
+        AuctionWindowResponse response = new AuctionWindowResponse();
+        response.setWindowList(list);
+        return response;
     }
 
     private void callNotificationToSeller(String itemId, String sellerId, String bidderId,
