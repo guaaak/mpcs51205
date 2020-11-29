@@ -1,6 +1,6 @@
 web:
   build: .
-  container_name: item_service
+  container_name: itemservice
   ports:
     - "8080:8080"
   links:
@@ -9,6 +9,6 @@ web:
 
 mongo:
   image: mongo:latest
-  container_name: mongo_item_service
+  container_name: mongoitemservice
   ports:
     - "27017:27017"
