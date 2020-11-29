@@ -8,10 +8,18 @@ import requests
 #for test
 @app.route('/')
 def hello():
-    return jsonify(
+    resp = make_response(jsonify(
         id = '5',
         name = 'container'
-    )
+    ))
+    resp.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+    resp.headers['Access-Control-Allow-Methods'] = 'GET'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return resp
+    # return jsonify(
+    #     id = '5',
+    #     name = 'container'
+    # )
 
 def is_user_admin_or_suspend(uid, op):
     result = False
@@ -31,9 +39,17 @@ def is_user_admin():
     uid = int(request.args.get('uid'))
     if uid:
         result = is_user_admin_or_suspend(uid, 'isAdmin')
-    return jsonify(
+    
+    # return jsonify(
+    #     is_admin = result
+    # ), 200
+    resp = make_response(jsonify(
         is_admin = result
-    ), 200
+    ))
+    resp.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+    resp.headers['Access-Control-Allow-Methods'] = 'GET'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return resp
 
 @app.route('/isSuspend/', methods=['GET'])
 def is_user_suspend():
@@ -41,24 +57,29 @@ def is_user_suspend():
     uid = int(request.args.get('uid'))
     if uid:
         result = is_user_admin_or_suspend(uid, 'isSuspend')
-    return jsonify(
+    # return jsonify(
+    #     is_suspend = result
+    # ), 200
+    resp = make_response(jsonify(
         is_suspend = result
-    ), 200
+    ))
+    resp.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+    resp.headers['Access-Control-Allow-Methods'] = 'GET'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return resp
 
 @app.route('/userCreate/', methods=['POST', 'GET'])
 def user_create():
-    # username = request.form['username']
-    # email = request.form['email']
-    # password = request.form['password']
-    # bio = request.form['user_bio']
     username = request.json['username']
     email = request.json['email']
     password = request.json['password']
     bio = request.json['user_bio']
-    # username = 'test4'
-    # email = 'test4@test.com'
-    # password = 'test4'
-    # bio = 'test user4'
+
+    content = jsonify(
+            status = 'fail',
+            reason = 'user already existed'
+        )
+    
     if username and email:
         existing_user = User.query.filter(
             User.username == username or User.email == email
@@ -67,10 +88,11 @@ def user_create():
             # return make_response(
             #     f'{username} ({email}) already created!'
             # )
-            return jsonify(
-                status = 'fail',
-                reason = 'user already existed'
-            ), 200
+            resp = make_response(content)
+            resp.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+            resp.headers['Access-Control-Allow-Methods'] = 'POST'
+            resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+            return resp
         new_user = User(
             username=username,
             email=email,
@@ -83,13 +105,21 @@ def user_create():
         )
         db.session.add(new_user)  # Adds new User record to database
         db.session.commit()
-    return jsonify(
+    content = jsonify(
         status = 'success'
-    ), 201
+    )
+    resp = make_response(content)
+    resp.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+    resp.headers['Access-Control-Allow-Methods'] = 'POST'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return resp
 
 @app.route('/userDelete/', methods=['POST', 'GET'])
 def user_delete():
     uid = int(request.args.get('uid'))
+    content = jsonify(
+            status = 'fail'
+        )
     if uid:
         existing_user = db.session.query(User).get(uid)
         if existing_user:
@@ -97,22 +127,22 @@ def user_delete():
             db.session.commit()
             # return make_response('Delete successfully!')
             #return True
-            return jsonify(
+            content = jsonify(
                 status = 'success'
-            ), 200
-        else:
-            return jsonify(
-                status = 'fail',
-                reason = 'user not existed'
-            ), 200
-    return jsonify(
-        status = 'fail',
-        reason = 'uid missed'
-    ), 200
+            )
+    resp = make_response(content)
+    resp.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+    resp.headers['Access-Control-Allow-Methods'] = 'POST'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return resp
+    
 
 @app.route('/userSuspend/', methods=['POST', 'GET'])
 def user_suspend():
     uid = int(request.args.get('uid'))
+    content = jsonify(
+            status = 'fail'
+        )
     if uid:
         existing_user = db.session.query(User).get(uid)
         if existing_user:
@@ -120,36 +150,35 @@ def user_suspend():
             db.session.commit()
             # return make_response('Suspend successfully')
             #return True
-            return jsonify(
+            content =  jsonify(
                 status = 'success'
-            ), 200
-        else:
-            # return make_response('User not existed')
-            #return False
-            return jsonify(
-                status = 'fail',
-                reason = 'user not existed'
-            ), 200
-    return jsonify(
-        status = 'fail',
-        reason = 'uid missed'
-    ), 200
+            )
+    resp = make_response(content)
+    resp.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+    resp.headers['Access-Control-Allow-Methods'] = 'GET'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return resp
 
 @app.route('/getUserInfo/', methods=['GET'])
 def get_user_info():
     uid = int(request.args.get('uid'))
+    content = jsonify(
+        status = 'fail',
+        reason = 'uid not right or missed'
+    )
     if uid:
         user_info = db.session.query(User).get(uid)
         if user_info:
-            return jsonify(
+            content =  jsonify(
                 status = 'success',
                 username = user_info.username,
                 email = user_info.email
             ), 200
-    return jsonify(
-        status = 'fail',
-        reason = 'uid not right or missed'
-    ), 200
+    resp = make_response(content)
+    resp.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+    resp.headers['Access-Control-Allow-Methods'] = 'GET'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return resp
 
 @app.route('/login/', methods=['GET', 'POST'])
 def user_login():
@@ -157,69 +186,67 @@ def user_login():
     password = request.json['password']
     # email = 'test4@test.com'
     # password = 'test'
+    content = jsonify(
+            status = 'fail',
+            reason = 'email or password missed'
+        )
     if email and password:
         user_info = db.session.query(User.password, User.uid, User.admin).filter(User.email == email).first()
         if user_info and user_info.password == password:
-            return jsonify(
+            content = jsonify(
                 status = 'success',
                 user_id = user_info.uid,
                 admin = user_info.admin
-            ), 200
-        else:
-            return jsonify(
-                status = 'fail',
-                reason = 'email or password is not right'
-            ), 200
-    return jsonify(
-            status = 'fail',
-            reason = 'email or password missed'
-        ), 200
+            )
+    resp = make_response(content)
+    resp.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+    resp.headers['Access-Control-Allow-Methods'] = 'GET'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return resp
 
 @app.route('/fetchUserIdentity/', methods=['GET'])
 def fetch_user_identity():
     uid = int(request.args.get('uid'))
+    content = jsonify(
+        status = 'fail',
+        info = 'uid wrong'
+    )
     if uid:
         user_info = db.session.query(User.username, User.email, User.suspend).filter(User.uid == uid).first()
         if user_info:
-            return jsonify(
+            content = jsonify(
                 status = 'success',
                 username = user_info.username,
                 email = user_info.email,
                 suspend = user_info.suspend
-            ), 200
-        else:
-            return jsonify(
-                status = 'fail',
-                info = 'user not exits'
-            ), 200
-    return jsonify(
-        status = 'fail',
-        info = 'uid missed'
-    ), 200
+            )
+    resp = make_response(content)
+    resp.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+    resp.headers['Access-Control-Allow-Methods'] = 'GET'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return resp
+
 
 @app.route('/addItemToWatchlist/', methods=['GET', 'POST'])
 def add_item_to_watchlist():
     uid = int(request.args.get('uid'))
     item_id = int(request.args.get('item_id'))
     criteria = float(request.args.get('criteria'))
+    content = jsonify(
+                status = 'fail'
+            )
     if uid is not None and item_id is not None:
         existing_record = Watchlist.query.filter(
             and_(Watchlist.uid == uid,Watchlist.itemid == item_id)
         ).first()
         if existing_record:
-            return jsonify(
-                status = 'fail',
-                reason = 'recording already exist'
-            )
+            resp = make_response(content)
+            resp.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+            resp.headers['Access-Control-Allow-Methods'] = 'GET'
+            resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+            return resp
         url = 'http://itemservice:8080/auction/item/' + str(item_id)
         r = requests.get(url)
-        # url = 'http://itemservice:8080/auction/item/0'
-        # r = requests.get(url)
-        # return jsonify(
-        #     url = url,
-        #     code = r.status_code,
-        #     name = r.json()['name']
-        # )
         name = r.json()['name']
         new_record = Watchlist(
             uid = uid,
@@ -230,12 +257,15 @@ def add_item_to_watchlist():
         )
         db.session.add(new_record)
         db.session.commit()
-        return jsonify(
+        content =  jsonify(
             status = 'success'
         )
-    return jsonify(
-        status = 'fail',
-    ), 200
+    resp = make_response(content)
+    resp.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+    resp.headers['Access-Control-Allow-Methods'] = 'GET'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return resp
+
 
 @app.route('/getItemsInWatchlist/', methods=['GET'])
 def get_items_in_watchlist():
@@ -251,15 +281,23 @@ def get_items_in_watchlist():
                 'criteria': record.criteria
             }
             records.append(item)
-        return jsonify(
+        resp = make_response(jsonify(
             uid = uid,
             records = records
-        )
+        ))
+        resp.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+        resp.headers['Access-Control-Allow-Methods'] = 'GET'
+        resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+        return resp
+
 
 @app.route('/meetCriteria/')
 def users_meet_criteria():
     item_id = int(request.args.get('item_id'))
     price = float(request.args.get('price'))
+    content = jsonify(
+        status = 'fail'
+    )
     if item_id and price:
         infos = []
         all_users = db.session.query(Watchlist.uid, Watchlist.criteria).filter(and_(Watchlist.itemid == item_id, Watchlist.criteria >= price)).all()
@@ -275,12 +313,14 @@ def users_meet_criteria():
                     'criteria': user.criteria
                 }
                 infos.append(info)
-        return jsonify(
+        content = jsonify(
             all_users = infos,
             status = 'success'
         )
-    return jsonify(
-        status = 'fail'
-    )
+    resp = make_response(content)
+    resp.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+    resp.headers['Access-Control-Allow-Methods'] = 'GET'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return resp
 
     
