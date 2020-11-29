@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  web:
+    build: ./services/web
+    command: flask run -h 0.0.0.0 -p 23334
+    volumes:
+      - ./services/web/:/usr/src/app/
+    ports:
+      - 23334:23334
+    env_file:
+      - ./.env.dev
+  db:
+    image: postgres:12-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=hello_buying
+      - POSTGRES_PASSWORD=hello_buying
+      - POSTGRES_DB=hello_buying_dev
+    ports:
+      - "5433:5432"
+
+volumes:
+  postgres_data:
