@@ -7,7 +7,7 @@ import com.example.itemservice.model.RequestFlagItem;
 import com.example.itemservice.model.RequestItemBody;
 import com.example.itemservice.model.ResponseFlaggedList;
 import com.example.itemservice.model.ResponseItemBody;
-import com.example.itemservice.model.ResponseSearchOnItem;
+import com.example.itemservice.model.ResponseSearchResults;
 import com.example.itemservice.model.SimpleResponse;
 import com.example.itemservice.model.UpdateItemBody;
 import java.util.List;
@@ -30,16 +30,16 @@ public interface ItemCRUDApi {
     Item getItemByID(@PathVariable String itemId);
 
     @RequestMapping(value = "/keyword/{keyword}", method = RequestMethod.GET)
-    List<ResponseSearchOnItem> getItemListByKeyword(@PathVariable String keyword);
+    ResponseSearchResults getItemListByKeyword(@PathVariable String keyword);
 
     @RequestMapping(value = "/category/{categoryId}", method = RequestMethod.GET)
-    List<ResponseSearchOnItem> getItemListByCategory(@PathVariable String categoryId);
+    ResponseSearchResults getItemListByCategory(@PathVariable String categoryId);
 
     @RequestMapping(value = "/flagged", method = RequestMethod.GET)
     ResponseFlaggedList getItemListByFlag();
 
     @RequestMapping(value = "/flagging", method = RequestMethod.POST)
-    Boolean flagItem(@RequestBody RequestFlagItem requestFlagItem);
+    SimpleResponse flagItem(@RequestBody RequestFlagItem requestFlagItem);
 
     @RequestMapping(value = "/delete/{itemId}", method = RequestMethod.POST)
     SimpleResponse deleteItem(@PathVariable String itemId);
@@ -48,6 +48,7 @@ public interface ItemCRUDApi {
     SimpleResponse updateItem(@PathVariable String itemId,
             @RequestBody UpdateItemBody updateItemBody);
 
+    //Deprecated
     @RequestMapping(value = "/countdown/{keyword}", method = RequestMethod.GET)
     List<CountDownInfo> getCountdownInfo(@PathVariable String keyword);
 

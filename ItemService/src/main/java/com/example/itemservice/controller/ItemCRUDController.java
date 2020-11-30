@@ -12,6 +12,7 @@ import com.example.itemservice.model.ResponseFlaggedItem;
 import com.example.itemservice.model.ResponseFlaggedList;
 import com.example.itemservice.model.ResponseItemBody;
 import com.example.itemservice.model.ResponseSearchOnItem;
+import com.example.itemservice.model.ResponseSearchResults;
 import com.example.itemservice.model.SimpleResponse;
 import com.example.itemservice.model.UpdateItemBody;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -67,9 +68,11 @@ public class ItemCRUDController implements ItemCRUDApi {
     }
 
     @Override
-    public List<ResponseSearchOnItem> getItemListByKeyword(String keyword) {
+    public ResponseSearchResults getItemListByKeyword(String keyword) {
 
         List<Item> itemList = itemCRUDService.getItemListByKeyword(keyword);
+
+        System.out.println(itemList);
 
         List<ResponseSearchOnItem> res = new ArrayList<>();
 
@@ -80,6 +83,9 @@ public class ItemCRUDController implements ItemCRUDApi {
                 BidRecord bidRecord = restT
                         .getForObject("http://localhost:9090/auction/bidding/bid/" + item.getId(),
                                 BidRecord.class);
+
+                System.out.println(bidRecord);
+
                 if (bidRecord.getBidStatus() == BidStatus.Closed) {
                     continue;
                 }
@@ -98,11 +104,15 @@ public class ItemCRUDController implements ItemCRUDApi {
             }
         }
 
-        return res;
+        System.out.println(res);
+
+        ResponseSearchResults response = new ResponseSearchResults();
+        response.setSearchResults(res);
+        return response;
     }
 
     @Override
-    public List<ResponseSearchOnItem> getItemListByCategory(String categoryId) {
+    public ResponseSearchResults getItemListByCategory(String categoryId) {
 
         List<Item> itemList = itemCRUDService.getItemListByCategory(categoryId);
 
@@ -131,7 +141,9 @@ public class ItemCRUDController implements ItemCRUDApi {
             res.add(response);
         }
 
-        return res;
+        ResponseSearchResults response = new ResponseSearchResults();
+        response.setSearchResults(res);
+        return response;
     }
 
     @Override
@@ -156,11 +168,11 @@ public class ItemCRUDController implements ItemCRUDApi {
     }
 
     @Override
-    public Boolean flagItem(RequestFlagItem requestFlagItem) {
+    public SimpleResponse flagItem(RequestFlagItem requestFlagItem) {
 
         itemCRUDService.flagItem(requestFlagItem.getItemID(), requestFlagItem.getUserID());
 
-        return true;
+        return new SimpleResponse();
     }
 
     @Override

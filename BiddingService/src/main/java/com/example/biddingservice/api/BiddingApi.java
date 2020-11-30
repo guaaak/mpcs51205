@@ -50,7 +50,6 @@ public interface BiddingApi {
     @RequestMapping(value = "/buyNowUpdate/{itemId}", method = RequestMethod.POST)
     Boolean updateBuyNowOption(@PathVariable String itemId, @RequestBody UpdateBuyNow updateBuyNow);
 
-
     @RequestMapping(value = "/countdown/create", method = RequestMethod.POST)
     SimpleResponse createCountDown(@RequestBody CountDownRecord countDownRecord);
 
