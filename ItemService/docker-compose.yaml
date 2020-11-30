@@ -5,6 +5,9 @@ web:
     - "8080:8080"
   links:
     - mongo:mongo
+  networks:
+    - default
+    - app_net
   command: java -Djava.security.egd=file:/dev/./urandom -jar /app.jar
 
 mongo:
@@ -12,3 +15,7 @@ mongo:
   container_name: mongoitemservice
   ports:
     - "27017:27017"
+
+networks:
+  app_net:
+    external: true

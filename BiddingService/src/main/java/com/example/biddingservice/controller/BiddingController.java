@@ -129,6 +129,12 @@ public class BiddingController implements BiddingApi {
                     System.out.println("sending emails to winner and seller...");
                     //TO_DO add item to the winners cart
                     System.out.println("adding item to winner's cart");
+                    try {
+                        callBuyingToAddToCart(bidRecord.getWinnerId(), bidRecord.getItemId(),
+                                bidRecord.getFinalOffer());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     executorService.shutdown();
                 }
 
@@ -291,9 +297,14 @@ public class BiddingController implements BiddingApi {
 
         RestTemplate restT = new RestTemplate();
         // 通过 Jackson JSON processing library 直接将返回值绑定到对象
+//        MeetCriteriaResponse response = restT
+//                .getForObject(" http://localhost:23333/meetCriteria/?item_id=" + itemId + "&price="
+//                        + updateBuyNow.getBuyNowPrice(), MeetCriteriaResponse.class);
+
         MeetCriteriaResponse response = restT
-                .getForObject(" http://localhost:23333/meetCriteria/?item_id=" + itemId + "&price="
-                        + updateBuyNow.getBuyNowPrice(), MeetCriteriaResponse.class);
+                .getForObject(
+                        " http://usermanagement:23333/meetCriteria/?item_id=" + itemId + "&price="
+                                + updateBuyNow.getBuyNowPrice(), MeetCriteriaResponse.class);
 
         System.out.println(response);
 
@@ -349,7 +360,8 @@ public class BiddingController implements BiddingApi {
         params.put("user_id", bidderId);
         params.put("bid_price", bidPrice);
 
-        String url = "http://localhost:5000/notification/seller_alert";
+//        String url = "http://localhost:5000/notification/seller_alert";
+        String url = "http://NotiCon:5000/notification/seller_alert";
 
         String value = mapper.writeValueAsString(params);
         HttpEntity<String> requestEntity = new HttpEntity<String>(value, headers);
@@ -373,7 +385,8 @@ public class BiddingController implements BiddingApi {
         params.put("highest_bid_user_id", highestBidderId);
         params.put("highest_bid_price", bidPrice);
 
-        String url = "http://localhost:5000/notification/bid_update";
+        //String url = "http://localhost:5000/notification/bid_update";
+        String url = "http://NotiCon:5000/notification/bid_update";
 
         String value = mapper.writeValueAsString(params);
         HttpEntity<String> requestEntity = new HttpEntity<String>(value, headers);
@@ -396,7 +409,8 @@ public class BiddingController implements BiddingApi {
         params.put("user_id_list", bidders.toString());
         params.put("remain_time", remainSeconds);
 
-        String url = "http://localhost:5000/notification/time_alert";
+        //String url = "http://localhost:5000/notification/time_alert";
+        String url = "http://NotiCon:5000/notification/time_alert";
 
         String value = mapper.writeValueAsString(params);
         HttpEntity<String> requestEntity = new HttpEntity<String>(value, headers);
@@ -407,9 +421,12 @@ public class BiddingController implements BiddingApi {
     private void callBuyingToAddToCart(String userId, String itemId, double price) {
 
         RestTemplate restT = new RestTemplate();
-        // 通过 Jackson JSON processing library 直接将返回值绑定到对象
+
+//        String item = restT
+//                .getForObject("http://localhost:23334/addItemToCart/?uid=" + userId + "&item_id="
+//                        + itemId + "&price=" + price, String.class);
         String item = restT
-                .getForObject("http://localhost:23334/addItemToCart/?uid=" + userId + "&item_id="
+                .getForObject("http://buying:23334/addItemToCart/?uid=" + userId + "&item_id="
                         + itemId + "&price=" + price, String.class);
 
         System.out.println(item);
@@ -429,7 +446,8 @@ public class BiddingController implements BiddingApi {
         params.put("item_id", itemId);
         params.put("user_id", userId);
 
-        String url = "http://localhost:5000/notification/watchlist";
+        //String url = "http://localhost:5000/notification/watchlist";
+        String url = "http://NotiCon:5000/notification/watchlist";
 
         String value = mapper.writeValueAsString(params);
         HttpEntity<String> requestEntity = new HttpEntity<String>(value, headers);

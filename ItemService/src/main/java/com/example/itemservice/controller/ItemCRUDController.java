@@ -81,7 +81,8 @@ public class ItemCRUDController implements ItemCRUDApi {
             // 通过 Jackson JSON processing library 直接将返回值绑定到对象
             try {
                 BidRecord bidRecord = restT
-                        .getForObject("http://localhost:9090/auction/bidding/bid/" + item.getId(),
+                        .getForObject(
+                                "http://biddingservice:9090/auction/bidding/bid/" + item.getId(),
                                 BidRecord.class);
 
                 System.out.println(bidRecord);
@@ -124,7 +125,7 @@ public class ItemCRUDController implements ItemCRUDApi {
             RestTemplate restT = new RestTemplate();
             // 通过 Jackson JSON processing library 直接将返回值绑定到对象
             BidRecord bidRecord = restT
-                    .getForObject("http://localhost:9090/auction/bidding/bid/" + item.getId(),
+                    .getForObject("http://biddingservice:9090/auction/bidding/bid/" + item.getId(),
                             BidRecord.class);
             if (bidRecord.getBidStatus() == BidStatus.Closed) {
                 continue;
@@ -183,7 +184,7 @@ public class ItemCRUDController implements ItemCRUDApi {
         RestTemplate restT = new RestTemplate();
         // 通过 Jackson JSON processing library 直接将返回值绑定到对象
         BidRecord bidRecord = restT
-                .getForObject("http://localhost:9090/auction/bidding/bid/" + itemId,
+                .getForObject("http://biddingservice:9090/auction/bidding/bid/" + itemId,
                         BidRecord.class);
 
         System.out.println(bidRecord);
@@ -196,7 +197,8 @@ public class ItemCRUDController implements ItemCRUDApi {
             } else {
                 itemCRUDService.deleteItem(itemId);
                 restT = new RestTemplate();
-                restT.getForObject("http://localhost:9090/auction/bidding/closeEmptyBid/" + itemId,
+                restT.getForObject(
+                        "http://biddingservice:9090/auction/bidding/closeEmptyBid/" + itemId,
                         String.class);
                 simpleResponse.setSuccess(true);
             }
@@ -217,7 +219,7 @@ public class ItemCRUDController implements ItemCRUDApi {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, String> params = new HashMap<>();
         params.put("canBuyNow", updateItemBody.getCanBuyNow());
-        String url = "http://localhost:9090/auction/bidding/buyNowUpdate/" + itemId;
+        String url = "http://biddingservice:9090/auction/bidding/buyNowUpdate/" + itemId;
 
         String value = "";
         try {
@@ -243,8 +245,13 @@ public class ItemCRUDController implements ItemCRUDApi {
             RestTemplate restT = new RestTemplate();
             // 通过 Jackson JSON processing library 直接将返回值绑定到对象
             try {
+//                BidRecord bidRecord = restT
+//                        .getForObject("http://localhost:9090/auction/bidding/bid/" + item.getId(),
+//                                BidRecord.class);
+
                 BidRecord bidRecord = restT
-                        .getForObject("http://localhost:9090/auction/bidding/bid/" + item.getId(),
+                        .getForObject(
+                                "http://biddingservice:9090/auction/bidding/bid/" + item.getId(),
                                 BidRecord.class);
                 if (bidRecord.getBidStatus() != BidStatus.Ready) {
                     continue;

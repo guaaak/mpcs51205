@@ -5,6 +5,9 @@ web:
     - "9090:9090"
   links:
     - mongobiddingservice:mongobiddingservice
+  networks:
+    - default
+    - app_net
   command: java -Djava.security.egd=file:/dev/./urandom -jar /app.jar
 
 mongobiddingservice:
@@ -12,3 +15,7 @@ mongobiddingservice:
   container_name: mongobiddingservice
   ports:
     - "27018:27017"
+
+networks:
+  app_net:
+    external: true
