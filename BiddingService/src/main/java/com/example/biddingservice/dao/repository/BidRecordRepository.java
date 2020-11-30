@@ -28,4 +28,6 @@ public interface BidRecordRepository {
 
     List<BidRecord> getClosedBids();
 
+    List<BidRecord> getBidBySeller(String sellerId);
+
 }

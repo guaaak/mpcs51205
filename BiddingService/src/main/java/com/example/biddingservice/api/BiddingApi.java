@@ -4,6 +4,7 @@ import com.example.biddingservice.constants.SysConstants;
 import com.example.biddingservice.dao.domain.BidRecord;
 import com.example.biddingservice.dao.domain.CountDownRecord;
 import com.example.biddingservice.model.AuctionWindowResponse;
+import com.example.biddingservice.model.PrevAuctionResponse;
 import com.example.biddingservice.model.RequestInitBidBody;
 import com.example.biddingservice.model.RequestNewOfferBody;
 import com.example.biddingservice.model.ResponseActiveBidList;
@@ -55,6 +56,9 @@ public interface BiddingApi {
 
     @RequestMapping(value = "/countdown/{userId}", method = RequestMethod.GET)
     AuctionWindowResponse getCountDown(@PathVariable String userId);
+
+    @RequestMapping(value = "/prevAuctions/{userId}", method = RequestMethod.GET)
+    PrevAuctionResponse getPrevAuctionsList(@PathVariable String userId);
 
 
 }

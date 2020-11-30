@@ -89,4 +89,9 @@ public class BidProcessServiceImpl implements BidProcessService {
     public List<CountDownRecord> getCountDownByUserId(String userID) {
         return countDownRecordRepository.getRecordByUserId(userID);
     }
+
+    @Override
+    public List<BidRecord> getBidRecordsBySellerId(String sellerId) {
+        return bidRecordRepository.getBidBySeller(sellerId);
+    }
 }

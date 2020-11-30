@@ -1,8 +1,7 @@
 package com.example.biddingservice.api;
 
 import com.example.biddingservice.constants.SysConstants;
-import com.example.biddingservice.dao.domain.OfferRecord;
-import java.util.List;
+import com.example.biddingservice.model.PrevBidsResponse;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,6 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public interface OfferApi {
 
     @RequestMapping(value = "/prevBids/{userId}", method = RequestMethod.GET)
-    List<OfferRecord> getPrevOffers(@PathVariable String userId);
+    PrevBidsResponse getPrevOffers(@PathVariable String userId);
 
 }

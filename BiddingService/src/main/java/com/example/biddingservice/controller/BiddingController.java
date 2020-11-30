@@ -8,6 +8,7 @@ import com.example.biddingservice.dao.domain.BidRecord;
 import com.example.biddingservice.dao.domain.CountDownRecord;
 import com.example.biddingservice.model.AuctionWindowResponse;
 import com.example.biddingservice.model.MeetCriteriaResponse;
+import com.example.biddingservice.model.PrevAuctionResponse;
 import com.example.biddingservice.model.RequestInitBidBody;
 import com.example.biddingservice.model.RequestNewOfferBody;
 import com.example.biddingservice.model.ResponseActiveBidList;
@@ -228,7 +229,12 @@ public class BiddingController implements BiddingApi {
         System.out.println("sending emails to winner and seller...");
         //TO_DO add item to the winners cart
         System.out.println("adding item to winner's cart");
-        callBuyingToAddToCart(bidRecord.getWinnerId(), bidRecord.getItemId());
+        try {
+            callBuyingToAddToCart(bidRecord.getWinnerId(), bidRecord.getItemId(),
+                    bidRecord.getFinalOffer());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return new SimpleResponse();
     }
@@ -268,7 +274,12 @@ public class BiddingController implements BiddingApi {
 
         BidRecord bidRecord = bidProcessService.getBidRecord(itemId);
         System.out.println("adding item to winner's cart");
-        callBuyingToAddToCart(bidRecord.getWinnerId(), bidRecord.getItemId());
+        try {
+            callBuyingToAddToCart(bidRecord.getWinnerId(), bidRecord.getItemId(),
+                    bidRecord.getFinalOffer());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return new SimpleResponse();
     }
@@ -312,6 +323,14 @@ public class BiddingController implements BiddingApi {
         List<CountDownRecord> list = bidProcessService.getCountDownByUserId(userId);
         AuctionWindowResponse response = new AuctionWindowResponse();
         response.setWindowList(list);
+        return response;
+    }
+
+    @Override
+    public PrevAuctionResponse getPrevAuctionsList(String userId) {
+
+        PrevAuctionResponse response = new PrevAuctionResponse();
+        response.setPrevAuctionList(bidProcessService.getBidRecordsBySellerId(userId));
         return response;
     }
 
@@ -385,13 +404,13 @@ public class BiddingController implements BiddingApi {
         System.out.println("post json : " + response);
     }
 
-    private void callBuyingToAddToCart(String userId, String itemId) {
+    private void callBuyingToAddToCart(String userId, String itemId, double price) {
 
         RestTemplate restT = new RestTemplate();
         // 通过 Jackson JSON processing library 直接将返回值绑定到对象
         String item = restT
                 .getForObject("http://localhost:23334/addItemToCart/?uid=" + userId + "&item_id="
-                        + itemId, String.class);
+                        + itemId + "&price=" + price, String.class);
 
         System.out.println(item);
 

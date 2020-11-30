@@ -19,7 +19,7 @@ public class RestTemplateTest {
 
     public static void main(String[] args) throws JsonProcessingException {
         RestTemplate restT = new RestTemplate();
-        // 通过 Jackson JSON processing library 直接将返回值绑定到对象
+
         Item item = restT
                 .getForObject("http://localhost:8080/auction/item/0", Item.class);
 

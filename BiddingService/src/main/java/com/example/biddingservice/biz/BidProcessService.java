@@ -34,5 +34,7 @@ public interface BidProcessService {
 
     List<CountDownRecord> getCountDownByUserId(String userID);
 
+    List<BidRecord> getBidRecordsBySellerId(String sellerId);
+
 
 }

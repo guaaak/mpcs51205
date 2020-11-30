@@ -2,8 +2,7 @@ package com.example.biddingservice.controller;
 
 import com.example.biddingservice.api.OfferApi;
 import com.example.biddingservice.biz.OfferProcessService;
-import com.example.biddingservice.dao.domain.OfferRecord;
-import java.util.List;
+import com.example.biddingservice.model.PrevBidsResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,8 +17,11 @@ public class OfferApiController implements OfferApi {
     private OfferProcessService offerProcessService;
 
     @Override
-    public List<OfferRecord> getPrevOffers(String userId) {
+    public PrevBidsResponse getPrevOffers(String userId) {
 
-        return offerProcessService.getPrevBidsByUser(userId);
+        PrevBidsResponse response = new PrevBidsResponse();
+        response.setPrevBidsList(offerProcessService.getPrevBidsByUser(userId));
+
+        return response;
     }
 }

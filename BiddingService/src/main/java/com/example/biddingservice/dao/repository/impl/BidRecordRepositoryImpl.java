@@ -146,4 +146,14 @@ public class BidRecordRepositoryImpl implements BidRecordRepository {
         return mongoTemplate.find(query, BidRecord.class);
     }
 
+    @Override
+    public List<BidRecord> getBidBySeller(String sellerId) {
+
+        Query query = new Query();
+        Criteria criteria = new Criteria().where("sellerId").is(sellerId);
+        query.addCriteria(criteria);
+
+        return mongoTemplate.find(query, BidRecord.class);
+    }
+
 }
