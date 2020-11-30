@@ -98,6 +98,8 @@ public class ItemCRUDController implements ItemCRUDApi {
                 response.setEndTime(bidRecord.getEndTime());
                 response.setBuyNowPrice(bidRecord.getBuyNowPrice());
                 response.setSellerId(bidRecord.getSellerId());
+                response.setInitPrice(bidRecord.getInitPrice());
+                response.setCurrentHighestBid(bidRecord.getFinalOffer());
                 response.setItem(item);
                 res.add(response);
             } catch (Exception e) {
@@ -138,6 +140,8 @@ public class ItemCRUDController implements ItemCRUDApi {
             response.setEndTime(bidRecord.getEndTime());
             response.setBuyNowPrice(bidRecord.getBuyNowPrice());
             response.setSellerId(bidRecord.getSellerId());
+            response.setInitPrice(bidRecord.getInitPrice());
+            response.setCurrentHighestBid(bidRecord.getFinalOffer());
             response.setItem(item);
             res.add(response);
         }

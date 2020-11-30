@@ -38,4 +38,6 @@ public class BidRecord {
 
     Double buyNowPrice = 0.0D;
 
+    Double initPrice = 0.0D;
+
 }

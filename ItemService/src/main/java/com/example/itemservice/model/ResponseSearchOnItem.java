@@ -28,4 +28,8 @@ public class ResponseSearchOnItem {
 
     Double buyNowPrice = 0.0D;
 
+    Double initPrice = 0.0D;
+
+    Double currentHighestBid = 0.0D;
+
 }

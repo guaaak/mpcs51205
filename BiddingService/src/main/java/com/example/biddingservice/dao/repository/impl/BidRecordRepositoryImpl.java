@@ -39,6 +39,7 @@ public class BidRecordRepositoryImpl implements BidRecordRepository {
         bidRecord.setSellerId(bidInfo.getSellerId());
         bidRecord.setCanBuyNow(bidInfo.getCanBuyNow().equals("true"));
         bidRecord.setBuyNowPrice(bidInfo.getBuyNowPrice());
+        bidRecord.setInitPrice(bidInfo.getInitPrice());
 
         Date currDate = TimeHandler.getFixedCurrentTime();
         Date startDate = TimeHandler.toDate(bidInfo.getStartTime());
