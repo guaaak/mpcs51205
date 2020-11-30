@@ -1,20 +1,23 @@
-web:
-  build: .
-  container_name: itemservice
-  ports:
-    - "8080:8080"
-  links:
-    - mongo:mongo
-  networks:
-    - default
-    - app_net
-  command: java -Djava.security.egd=file:/dev/./urandom -jar /app.jar
+version: '3.7'
 
-mongo:
-  image: mongo:latest
-  container_name: mongoitemservice
-  ports:
-    - "27017:27017"
+services:
+  web:
+    build: .
+    container_name: itemservice
+    ports:
+      - "8080:8080"
+    links:
+      - mongo:mongo
+    networks:
+      - default
+      - app_net
+    command: java -Djava.security.egd=file:/dev/./urandom -jar /app.jar
+
+  mongo:
+    image: mongo:latest
+    container_name: mongoitemservice
+    ports:
+      - "27017:27017"
 
 networks:
   app_net:
