@@ -1,20 +1,23 @@
-web:
-  build: .
-  container_name: biddingservice
-  ports:
-    - "9090:9090"
-  links:
-    - mongobiddingservice:mongobiddingservice
-  networks:
-    - default
-    - app_net
-  command: java -Djava.security.egd=file:/dev/./urandom -jar /app.jar
+version: '3.7'
 
-mongobiddingservice:
-  image: mongo:latest
-  container_name: mongobiddingservice
-  ports:
-    - "27018:27017"
+services:
+  web:
+    build: .
+    container_name: biddingservice
+    ports:
+      - "9090:9090"
+    links:
+      - mongobiddingservice:mongobiddingservice
+    networks:
+      - default
+      - app_net
+    command: java -Djava.security.egd=file:/dev/./urandom -jar /app.jar
+
+  mongobiddingservice:
+    image: mongo:latest
+    container_name: mongobiddingservice
+    ports:
+      - "27018:27017"
 
 networks:
   app_net:
