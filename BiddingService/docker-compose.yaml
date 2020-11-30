@@ -18,6 +18,9 @@ services:
     container_name: mongobiddingservice
     ports:
       - "27018:27017"
+    networks:
+      - default
+      - app_net
 
 networks:
   app_net:
