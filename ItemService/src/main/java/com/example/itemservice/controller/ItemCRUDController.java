@@ -2,12 +2,14 @@ package com.example.itemservice.controller;
 
 import com.example.itemservice.api.ItemCRUDApi;
 import com.example.itemservice.biz.ItemCRUDService;
+import com.example.itemservice.dao.domain.Category;
 import com.example.itemservice.dao.domain.Item;
 import com.example.itemservice.model.BidRecord;
 import com.example.itemservice.model.BidStatus;
 import com.example.itemservice.model.CountDownInfo;
 import com.example.itemservice.model.RequestFlagItem;
 import com.example.itemservice.model.RequestItemBody;
+import com.example.itemservice.model.ResponseCatList;
 import com.example.itemservice.model.ResponseFlaggedItem;
 import com.example.itemservice.model.ResponseFlaggedList;
 import com.example.itemservice.model.ResponseItemBody;
@@ -236,6 +238,38 @@ public class ItemCRUDController implements ItemCRUDApi {
         ResponseEntity<String> response = restT.postForEntity(url, requestEntity, String.class);
         System.out.println("post json : " + response);
         return new SimpleResponse();
+    }
+
+    @Override
+    public SimpleResponse deleteCategory(String categoryId) {
+        itemCRUDService.deleteCategory(categoryId);
+        return new SimpleResponse();
+    }
+
+    @Override
+    public SimpleResponse createCategory(Category category) {
+        itemCRUDService.saveCategory(category);
+        return new SimpleResponse();
+    }
+
+    @Override
+    public SimpleResponse updateCategory(String categoryId, Category category) {
+        itemCRUDService.updateCategory(categoryId, category);
+        return new SimpleResponse();
+    }
+
+    @Override
+    public ResponseCatList getAllCategory() {
+
+        ResponseCatList responseCatList = new ResponseCatList();
+        responseCatList.setCategoryList(itemCRUDService.getAllCategory());
+        return responseCatList;
+    }
+
+    @Override
+    public Category getCategoryByCatId(String categoryId) {
+
+        return itemCRUDService.getCategoryById(categoryId);
     }
 
     @Override

@@ -1,7 +1,9 @@
 package com.example.itemservice.biz.impl;
 
 import com.example.itemservice.biz.ItemCRUDService;
+import com.example.itemservice.dao.domain.Category;
 import com.example.itemservice.dao.domain.Item;
+import com.example.itemservice.dao.repository.CategoryRepository;
 import com.example.itemservice.dao.repository.ItemRepository;
 import com.example.itemservice.dao.repository.MetaRepository;
 import com.example.itemservice.model.UpdateItemBody;
@@ -21,6 +23,9 @@ public class ItemCRUDServiceImpl implements ItemCRUDService {
 
     @Autowired
     private MetaRepository metaRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Override
     public void createItem(Item item) {
@@ -69,5 +74,32 @@ public class ItemCRUDServiceImpl implements ItemCRUDService {
     @Override
     public void updateItem(String itemId, UpdateItemBody updateItemBody) {
         itemRepository.updateItem(itemId, updateItemBody);
+    }
+
+    @Override
+    public void saveCategory(Category category) {
+        categoryRepository.save(category);
+    }
+
+    @Override
+    public void updateCategory(String categoryId, Category category) {
+        categoryRepository.update(categoryId, category);
+
+    }
+
+    @Override
+    public void deleteCategory(String categoryId) {
+        categoryRepository.delete(categoryId);
+    }
+
+    @Override
+    public Category getCategoryById(String categoryId) {
+
+        return categoryRepository.getById(categoryId);
+    }
+
+    @Override
+    public List<Category> getAllCategory() {
+        return categoryRepository.getAllCategory();
     }
 }

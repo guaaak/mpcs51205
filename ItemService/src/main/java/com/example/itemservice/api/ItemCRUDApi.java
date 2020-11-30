@@ -1,10 +1,12 @@
 package com.example.itemservice.api;
 
 import com.example.itemservice.constants.SysConstants;
+import com.example.itemservice.dao.domain.Category;
 import com.example.itemservice.dao.domain.Item;
 import com.example.itemservice.model.CountDownInfo;
 import com.example.itemservice.model.RequestFlagItem;
 import com.example.itemservice.model.RequestItemBody;
+import com.example.itemservice.model.ResponseCatList;
 import com.example.itemservice.model.ResponseFlaggedList;
 import com.example.itemservice.model.ResponseItemBody;
 import com.example.itemservice.model.ResponseSearchResults;
@@ -47,6 +49,22 @@ public interface ItemCRUDApi {
     @RequestMapping(value = "/update/{itemId}", method = RequestMethod.POST)
     SimpleResponse updateItem(@PathVariable String itemId,
             @RequestBody UpdateItemBody updateItemBody);
+
+    @RequestMapping(value = "/delete/category/{categoryId}", method = RequestMethod.POST)
+    SimpleResponse deleteCategory(@PathVariable String categoryId);
+
+    @RequestMapping(value = "/create/category", method = RequestMethod.POST)
+    SimpleResponse createCategory(@RequestBody Category category);
+
+    @RequestMapping(value = "/update/category/{categoryId}", method = RequestMethod.POST)
+    SimpleResponse updateCategory(@PathVariable String categoryId, @RequestBody Category category);
+
+    @RequestMapping(value = "/category/all", method = RequestMethod.GET)
+    ResponseCatList getAllCategory();
+
+    @RequestMapping(value = "/category/get/{categoryId}", method = RequestMethod.GET)
+    Category getCategoryByCatId(@PathVariable String categoryId);
+
 
     //Deprecated
     @RequestMapping(value = "/countdown/{keyword}", method = RequestMethod.GET)
