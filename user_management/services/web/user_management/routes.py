@@ -162,6 +162,28 @@ def user_suspend():
     resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
     return resp
 
+@app.route('/userUnSuspend/', methods=['POST', 'GET'])
+def user_unsuspend():
+    uid = int(request.args.get('uid'))
+    content = jsonify(
+            status = 'fail'
+        )
+    if uid:
+        existing_user = db.session.query(User).get(uid)
+        if existing_user:
+            existing_user.suspend = False
+            db.session.commit()
+            # return make_response('Suspend successfully')
+            #return True
+            content =  jsonify(
+                status = 'success'
+            )
+    resp = make_response(content)
+    resp.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+    resp.headers['Access-Control-Allow-Methods'] = 'GET'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return resp
+
 @app.route('/getUserInfo/', methods=['GET'])
 def get_user_info():
     uid = int(request.args.get('uid'))
@@ -176,7 +198,30 @@ def get_user_info():
                 status = 'success',
                 username = user_info.username,
                 email = user_info.email
-            ), 200
+            )
+    resp = make_response(content)
+    resp.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+    resp.headers['Access-Control-Allow-Methods'] = 'GET'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return resp
+
+@app.route('/getUserList/', methods=['GET'])
+def get_user_list():
+    users = []
+    users_info = db.session.query(User.uid, User.username, User.email, User.suspend, User.admin).all()
+    for user_info in users_info:
+        user = {
+            'uid' : user_info.uid,
+            'username' : user_info.username,
+            'email': user_info.email,
+            'suspend': user_info.suspend,
+            'admin': user_info.admin
+        }
+        users.append(user)
+    content = jsonify(
+        status = 'success',
+        users = users
+    )
     resp = make_response(content)
     resp.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
     resp.headers['Access-Control-Allow-Methods'] = 'GET'
