@@ -23,15 +23,20 @@ def add_item_to_cart():
     uid = int(request.args.get('uid'))
     item_id = int(request.args.get('item_id'))
     price = float(request.args.get('price'))
+    content = jsonify(
+                status = 'fail',
+                reason = 'recording already exist'
+            )
     if uid is not None and item_id is not None:
         existing_record = Shoppingcart.query.filter(
             and_(Shoppingcart.uid == uid,Shoppingcart.itemid == item_id)
         ).first()
         if existing_record:
-            return jsonify(
-                status = 'fail',
-                reason = 'recording already exist'
-            )
+            resp = make_response(content)
+            resp.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+            resp.headers['Access-Control-Allow-Methods'] = 'POST'
+            resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+            return resp
         # r = requests.get('http://localhost:8080/auction/item/' + str(item_id))
         # r = requests.get('http://localhost:23334/name')
         # name = r.json()['name']
@@ -52,9 +57,15 @@ def add_item_to_cart():
         )
         db.session.add(new_record)
         db.session.commit()
-    return jsonify(
+    content =  jsonify(
         status = 'success'
-    ), 200
+    )
+    resp = make_response(content)
+    resp.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+    resp.headers['Access-Control-Allow-Methods'] = 'POST'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return resp
+
 
 def _get_items_in_cart(uid):
     records = []
@@ -75,10 +86,15 @@ def get_items_in_cart():
     uid = int(request.args.get('uid'))
     records = []
     records = _get_items_in_cart(uid)
-    return jsonify(
+    resp = make_response(jsonify(
         uid = uid,
         records = records
-    ), 200
+    ))
+    resp.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+    resp.headers['Access-Control-Allow-Methods'] = 'GET'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return resp
+
     
 def _delete_item_in_cart(uid, item_id):
     existing_record = Shoppingcart.query.filter(
@@ -91,23 +107,24 @@ def _delete_item_in_cart(uid, item_id):
     else:
         return False
 
-@app.route('/deleteItemInCart/', methods=['GET'])
+@app.route('/deleteItemInCart/', methods=['POST', 'GET'])
 def delete_item_in_cart():
     uid = int(request.args.get('uid'))
     item_id = int(request.args.get('item_id'))
+    content = jsonify(
+        status = 'fail'
+    )
     if uid and item_id:
         r = _delete_item_in_cart(uid, item_id)
         if r:
             return jsonify(
                 status = 'success'
             )
-        else:
-            return jsonify(
-                status = 'fail'
-            )
-    return jsonify(
-        status = 'fail'
-    )
+    resp = make_response(content)
+    resp.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+    resp.headers['Access-Control-Allow-Methods'] = 'POST'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return resp
 
 def add_item_to_history(uid, item_id, item_name, price):
     existing_record = Shophistory.query.filter(
@@ -130,26 +147,31 @@ def add_item_to_history(uid, item_id, item_name, price):
 def checkout():
     uid = uid = int(request.args.get('uid'))
     items = _get_items_in_cart(uid)
+    content = jsonify(
+        status = 'success'
+    )
     for item in items:
         # r = requests.get('http://localhost:8080/auction/item/delete/' + str(item))
         # r = requests.get('http://localhost:23334/')
         url = 'http://itemservice:8080/auction/item/delete/' + str(item['item_id'])
         r = requests.post(url)
-        return jsonify(
-            status=r.status_code,
-            code = r.json()['success']
-        )
+        # return jsonify(
+        #     status=r.status_code,
+        #     code = r.json()['success']
+        # )
         if r.json()['success']:
             r1 = _delete_item_in_cart(uid, item['item_id'])
             r2 = add_item_to_history(uid, item['item_id'], item['item_name'], item['item_price'])
             print(r1, r2)
             if not r1 or not r2:
-                return jsonify(
+                content = jsonify(
                     status = 'fail'
                 )
-    return jsonify(
-        status = 'success'
-    )
+    resp = make_response(content)
+    resp.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+    resp.headers['Access-Control-Allow-Methods'] = 'POST'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return resp
     
 def _get_items_in_history(uid):
     records = []
@@ -170,7 +192,11 @@ def get_items_in_history():
     uid = int(request.args.get('uid'))
     records = []
     records = _get_items_in_history(uid)
-    return jsonify(
+    resp = make_response(jsonify(
         uid = uid,
         records = records
-    ), 200
+    ))
+    resp.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+    resp.headers['Access-Control-Allow-Methods'] = 'GET'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return resp
