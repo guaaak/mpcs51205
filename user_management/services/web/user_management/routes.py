@@ -76,6 +76,7 @@ def user_create():
     email = request.json['email']
     password = request.json['password']
     bio = request.json['user_bio']
+    admin = bool(request.json['admin'])
 
     content = jsonify(
             status = 'fail',
@@ -102,7 +103,7 @@ def user_create():
             credibility=5.0,
             created=dt.now(),
             bio=bio,
-            admin=False,
+            admin=admin,
             suspend=False,
         )
         db.session.add(new_user)  # Adds new User record to database
