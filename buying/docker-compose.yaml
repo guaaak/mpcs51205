@@ -13,9 +13,12 @@ services:
       - ./.env.dev
     links:
       - db:db
-    external_links:
-      - itemservice
-    network_mode: "bridge"
+    # external_links:
+    #   - itemservice
+    # network_mode: "bridge"
+    networks:
+      - default
+      - app_net
 
   db:
     image: postgres:12-alpine
@@ -27,7 +30,14 @@ services:
       - POSTGRES_DB=hello_buying_dev
     ports:
       - "5433:5432"
-    network_mode: "bridge"
+    # network_mode: "bridge"
+    networks:
+      - default
+      - app_net
 
 volumes:
   postgres_data:
+
+networks:
+  app_net:
+    external: true

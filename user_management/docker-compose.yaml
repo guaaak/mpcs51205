@@ -16,9 +16,12 @@ services:
     #   - bridge
     links:
       - db:db
-    external_links:
-      - itemservice
-    network_mode: "bridge"
+    # external_links:
+    #   - itemservice
+    # network_mode: "bridge"
+    networks:
+      - default
+      - app_net
 
   db:
     image: postgres:12-alpine
@@ -28,9 +31,12 @@ services:
       - POSTGRES_USER=hello_flask
       - POSTGRES_PASSWORD=hello_flask
       - POSTGRES_DB=hello_flask_dev
-    network_mode: "bridge"
+    # network_mode: "bridge"
     # networks:
     #   - bridge
+    networks:
+      - default
+      - app_net
 
 # networks:
 #   default:
@@ -42,3 +48,7 @@ services:
 
 volumes:
   postgres_data:
+
+networks:
+  app_net:
+    external: true
