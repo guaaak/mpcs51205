@@ -80,7 +80,6 @@ public class ItemCRUDController implements ItemCRUDApi {
 
         for (Item item : itemList) {
             RestTemplate restT = new RestTemplate();
-            // 通过 Jackson JSON processing library 直接将返回值绑定到对象
             try {
                 BidRecord bidRecord = restT
                         .getForObject(
@@ -127,7 +126,6 @@ public class ItemCRUDController implements ItemCRUDApi {
 
         for (Item item : itemList) {
             RestTemplate restT = new RestTemplate();
-            // 通过 Jackson JSON processing library 直接将返回值绑定到对象
             BidRecord bidRecord = restT
                     .getForObject("http://biddingservice:9090/auction/bidding/bid/" + item.getId(),
                             BidRecord.class);
@@ -188,7 +186,6 @@ public class ItemCRUDController implements ItemCRUDApi {
         SimpleResponse simpleResponse = new SimpleResponse();
 
         RestTemplate restT = new RestTemplate();
-        // 通过 Jackson JSON processing library 直接将返回值绑定到对象
         BidRecord bidRecord = restT
                 .getForObject("http://biddingservice:9090/auction/bidding/bid/" + itemId,
                         BidRecord.class);
@@ -281,7 +278,6 @@ public class ItemCRUDController implements ItemCRUDApi {
 
         for (Item item : itemList) {
             RestTemplate restT = new RestTemplate();
-            // 通过 Jackson JSON processing library 直接将返回值绑定到对象
             try {
 //                BidRecord bidRecord = restT
 //                        .getForObject("http://localhost:9090/auction/bidding/bid/" + item.getId(),
