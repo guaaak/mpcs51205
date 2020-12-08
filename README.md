@@ -1,15 +1,8 @@
 "# mpcs51205" 
 
-instructions:
-```bash
-cd user_management
-docker-compose up -d
-cd ../buying
-docker-compose up -d
+To run the frontend, navigate into auction-site-react-app directory and run the following commands:
 ```
-
-command for rebuild:
-```bash
-docker-compose up -d --build
+npm install
+npm run start
 ```
 

@@ -1,0 +1,14 @@
+.login-button {
+  margin-top: 20px;
+}
+
+.register-input {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.register-title {
+  font-size: large;
+}

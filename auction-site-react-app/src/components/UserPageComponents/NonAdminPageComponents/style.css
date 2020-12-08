@@ -1,0 +1,52 @@
+.modal {
+  position: fixed;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.modal-content {
+  background-color: white;
+  position: absolute;
+  top: 20%;
+  left: 30%;
+  width: 40%;
+  padding: 20px;
+  border-radius: 5px;
+  border: 2px solid black;
+}
+
+.modal-entry {
+  display: flex;
+}
+
+.search-bar {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkout-button {
+  margin-top: 40px;
+  margin-left: 160px;
+}
+
+.update-title {
+  font-size: large;
+}
+
+.update-section {
+  margin-top: 30px;
+  margin-bottom: 40px;
+}
+
+.suspend-section {
+  margin-bottom: 40px;
+}
+
+.update-row {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
