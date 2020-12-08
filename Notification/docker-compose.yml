@@ -1,0 +1,31 @@
+version: '3.7'
+
+services:
+    rabbitmq:
+        image: rabbitmq:3.5.3-management
+        ports:
+           - "8080:15672"  # management port (guest:guest)
+           - "5672:5672"   # amqp port
+           - "25672:25672" # cluster port
+        environment:
+           - RABBITMQ_NODENAME=rabbit
+           - RABBITMQ_DEFAULT_USER=admin
+           - RABBITMQ_DEFAULT_PASS=admin
+           - "8090:8090"
+    api:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        command: ./run_web.sh
+        ports:
+            - "5000:5000"
+    
+    mq:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        command: ./run_mq.sh
+        depends_on:
+            - rabbitmq
+        links:
+            - rabbitmq:amq
